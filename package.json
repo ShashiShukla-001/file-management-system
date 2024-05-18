@@ -10,9 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "@redux-devtools/extension": "^3.3.0",
     "bootstrap": "^5.3.3",
+    "firebase": "^10.12.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.0",
+    "redux": "^4.2.1",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^3.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
