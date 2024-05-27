@@ -1,10 +1,20 @@
-import './App.css'
+import './App.css';
+import HomePage from './pages/home/HomePage';
+
+import { Route,Routes } from 'react-router-dom'
+
+import Login from './pages/AuthPages/Login/Login';
+import Register from './pages/AuthPages/Register/Register';
 
 const App = () => {
 
   return (
    <div className='App'>
-      <h1>hello world</h1>
+    <Routes>
+      <Route path="/" element={<HomePage/>} />
+      <Route path='/login' element={<Login />}/>
+      <Route path='/register' element={<Register />}/>
+    </Routes>
    </div>
   )
 }
