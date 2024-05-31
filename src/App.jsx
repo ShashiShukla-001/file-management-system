@@ -1,10 +1,8 @@
 import './App.css';
-import HomePage from './pages/home/HomePage';
-
 import { Route,Routes } from 'react-router-dom'
 
-import Login from './pages/AuthPages/Login/Login';
-import Register from './pages/AuthPages/Register/Register';
+import {Login,Register,HomePage,DashboardPage} from "./pages"
+
 
 const App = () => {
 
@@ -14,9 +12,10 @@ const App = () => {
       <Route path="/" element={<HomePage/>} />
       <Route path='/login' element={<Login />}/>
       <Route path='/register' element={<Register />}/>
+      <Route path='/dashboard' element={<DashboardPage />}/>
     </Routes>
    </div>
   )
 }
 
-export default App
+export default App;
