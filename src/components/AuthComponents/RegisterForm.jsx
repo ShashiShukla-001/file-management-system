@@ -1,4 +1,7 @@
 import React from 'react'
+import { useDispatch } from 'react-redux';
+import { signUpUser } from '../../redux/actionCreators/authActionCreator';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {
 
@@ -6,9 +9,35 @@ const RegisterForm = () => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
+    const [success, setSuccess] = React.useState(false);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+          e.preventDefault();
+          if(!name || !email || !password)
+               {
+                    alert("Please fill in all the Fields");
+                    return;
+               }
+          if(password != passwordConfirmation)
+               {
+                    alert("Passwords do not match");
+                    return;
+               }
+          dispatch(signUpUser(name, email, password, setSuccess));
+
+    }
+
+    React.useEffect(() => {
+          if(success){
+               navigate("/dashboard");
+          }
+    }, [success])
 
   return (
-    <form autoComplete='off'>
+    <form autoComplete='off' onSubmit={handleSubmit}>
          <div className="form-group my-2">
             <input 
              type="text" 
@@ -36,7 +65,7 @@ const RegisterForm = () => {
              className="form-control"
              placeholder='password' 
              value={password}
-             onCanPlay={(e) => setPassword(e.target.value)}
+             onChange={(e) => setPassword(e.target.value)}
              />
         </div>
         <div className="form-group my-2">
@@ -46,7 +75,7 @@ const RegisterForm = () => {
              className="form-control"
              placeholder='Re-type password' 
              value={passwordConfirmation}
-             onCanPlay={(e) => setPasswordConfirmation(e.target.value)}
+             onChange={(e) => setPasswordConfirmation(e.target.value)}
              />
         </div>
         <button type="submit" className="btn btn-primary my-2 form-control">Register</button>
