@@ -1,16 +1,56 @@
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import { createFolder } from '../../../redux/actionCreators/fileFoldersActionCreators';
+
 const CreateFolder = ({setIsCreateFolderModelOpen}) => {  
 
     const [folderName, setFolderName] = useState("");
+
+    const {userFolders,user,currentFolder} = useSelector(
+        (state) => ({
+        userFolders : state.fileFolders.userFolders,
+        user: state.auth.user,
+        currentFolder: state.fileFolders.currentFolder,
+    }), shallowEqual);
+
+    const dispatch = useDispatch();
+
+    const checkFolderAlreadyPresent = (name) => {
+        const folderPresent = userFolders.find((folder) => folder.name == name);
+        if(folderPresent) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if(folderName){
             if(folderName.length > 3)
             {
-                alert(`Created folder ${folderName}`);
+                if(!checkFolderAlreadyPresent(folderName)){
+                  
+                    const data = {
+                        createdAt: new Date(),
+                        name: folderName,
+                        userId: user.uid,
+                        createdBy: user.displayName,
+                        path: currentFolder == 'root' ? [] : ["parent folder path!"],
+                        parent: currentFolder,
+                        lastAccessed: null,
+                        updatedAt: new Date(),
+                    }
+                    console.log(data);
+                    dispatch(createFolder(data));
+                }
+                else{
+                    alert("folder already present");
+                }
+                
             }
             else{
                 alert("Folder name must contain at least 3 characters");
