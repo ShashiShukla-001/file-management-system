@@ -8,23 +8,27 @@ const CreateFolder = ({setIsCreateFolderModelOpen}) => {
 
     const [folderName, setFolderName] = useState("");
 
-    const {userFolders,user,currentFolder} = useSelector(
+    const {userFolders,user,currentFolder, currentFolderData} = useSelector(
         (state) => ({
         userFolders : state.fileFolders.userFolders,
         user: state.auth.user,
         currentFolder: state.fileFolders.currentFolder,
+        currentFolderData: state.fileFolders.userFolders.find(
+            (folder) => folder.docId == state.fileFolders.currentFolder),
     }), shallowEqual);
 
     const dispatch = useDispatch();
 
     const checkFolderAlreadyPresent = (name) => {
-        const folderPresent = userFolders.find((folder) => folder.name == name);
-        if(folderPresent) {
-            return true;
-        }
-        else {
-            return false;
-        }
+            const folderPresent = userFolders
+            .filter((folder) => folder.data.parent == currentFolder)
+            .find((folder) => folder.data.name == name );
+            if(folderPresent) {
+                return true;
+            }
+            else {
+                return false;
+            }
     }
 
     const handleSubmit = (e) => {
@@ -39,12 +43,13 @@ const CreateFolder = ({setIsCreateFolderModelOpen}) => {
                         name: folderName,
                         userId: user.uid,
                         createdBy: user.displayName,
-                        path: currentFolder == 'root' ? [] : ["parent folder path!"],
+                        path: currentFolder == 'root' 
+                            ? [] 
+                            : [...currentFolderData?.data.path, currentFolder],
                         parent: currentFolder,
                         lastAccessed: null,
                         updatedAt: new Date(),
                     }
-                    console.log(data);
                     dispatch(createFolder(data));
                 }
                 else{
@@ -60,6 +65,8 @@ const CreateFolder = ({setIsCreateFolderModelOpen}) => {
             alert("Folder name cannot be empty");
         }
     }
+
+
 
     return (  
         <div className="col-md-12  position-fixed top-0 left-0 w-100 h-100" 

@@ -3,14 +3,18 @@ import "./ShowItems.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { changeFolder } from "../../redux/actionCreators/fileFoldersActionCreators";
 
 const ShowItems = ({title, items, type,}) => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleDbClick = (itemId) => {
         if(type == "folder")
         {
+            dispatch(changeFolder(itemId));
             navigate(`/dashboard/folder/${itemId}`);
         }
         else{
